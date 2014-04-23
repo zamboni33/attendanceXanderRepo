@@ -42,6 +42,23 @@ public class RegisterServlet extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		
+		UserService userService = UserServiceFactory.getUserService();
+	    User user = userService.getCurrentUser();
+		
+		ObjectifyService.register(Professor.class);
+		ObjectifyService.register(Student.class);
+		
+		List<Professor> professors = ObjectifyService.ofy().load().type(Professor.class).list();
+		Professor thisProfessor = null;
+		
+		for(Professor professor : professors ) {
+			// Look for users in the database
+			if (professor.getEmail().equals (user.getEmail().toLowerCase()) ){
+				thisProfessor = professor;
+			}
+		}
+		
+		
 //		Professor newProfessor = new Professor (req.getParameter("first"), req.getParameter("last"), req.getParameter("username"), req.getParameter("password"), req.getParameter("email"), req.getParameter("coursename"));
 		req.getParameter("first");
 		req.getParameter("last");
@@ -52,6 +69,13 @@ public class RegisterServlet extends HttpServlet {
 		resp.getWriter().println(req.getParameter("first"));
 		resp.getWriter().println(req.getParameter("last"));
 		resp.getWriter().println(req.getParameter("courseDropDown"));
+		
+		List<String> students = thisProfessor.getStudents();
+		for(String student : students){
+			resp.getWriter().println(student);
+		}
+
+		
 		resp.getWriter().println(req.getParameter("latitude"));
 		resp.getWriter().println(req.getParameter("longitude"));
 		

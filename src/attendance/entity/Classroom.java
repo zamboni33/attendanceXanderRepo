@@ -1,5 +1,7 @@
 package attendance.entity;
 
+import java.util.ArrayList;
+
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -13,6 +15,8 @@ public class Classroom {
 	int classUnique;
 	double latitude;
 	double longitude;
+	ArrayList<String> days;
+	ArrayList<Integer> times;
 
 	
 	static {
@@ -25,6 +29,8 @@ public class Classroom {
 		this.classUnique = 0;
 		this.latitude = 0.0;
 		this.longitude = 0.0;
+		this.days = null;
+		this.times = null;
 	}
 	
 	public Classroom(String roomNumber, String classTitle, int classUnique){
@@ -33,6 +39,12 @@ public class Classroom {
 		this.classUnique = classUnique;
 		this.latitude = 30.290408;
 		this.longitude = -97.736172;
+		this.days = new ArrayList<String>();
+		days.add("M");
+		days.add("W");
+		days.add("F");
+		this.times = new ArrayList<Integer>();
+		times.add(900);
 	}
 	
 	public String getClassTitle() {
@@ -61,5 +73,19 @@ public class Classroom {
 	}
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+	
+	public ArrayList<String> getDays() {
+		return this.days;
+	}
+	public void setDays(ArrayList<String> schedule) {
+		this.days = schedule;
+	}
+	
+	public ArrayList<Integer> getTimes() {
+		return this.times;
+	}
+	public void setTimes(ArrayList<Integer> schedule) {
+		this.times = schedule;
 	}
 }

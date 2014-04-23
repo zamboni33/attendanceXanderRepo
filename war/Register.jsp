@@ -31,17 +31,7 @@
 
  </head>
  
-  <body>
- 
-  	<div class="header">
-		Attendance Application Take 2
-	</div>
- 
-	<div class="main-wrap">	
-	
-		<div class="container">
-		
-			<div class="menu">
+   			<div class="menu">
 				<%
 				    UserService userService = UserServiceFactory.getUserService();
 				    User user = userService.getCurrentUser();
@@ -60,87 +50,149 @@
 								window.location.href=(" <%= userService.createLogoutURL("http://attendancexander.appspot.com/")%> ")
 							}
 						</script>
-			</div>
+			</div>	
+ 
+  <body>
+ 
+  	<div class="header">
+		Attendance Application Take 2
+	</div>
+ 
+	<div class="main-wrap">	
+	
+		<div class="container">
 			
 			<div class="content">
 			
 				    Register a Class
 
-				    <form action="/Register" method="post">
-						<h3>Professor | Register</h3>
-						
-						<br>
-						
-						<h4>First Name:</h4>
-							<div>
-								<input 	id="first"	
-										name="first">
-							</div>
-							
-						<h4>Last Name:</h4>
-							<div>
-								<input 	id="last"
-										name="last">
-							</div>
-							
-						<h4>Course name:</h4>
-							<div>
-							<%
-							    ObjectifyService.register(Classroom.class);
-								List<Classroom> classrooms = ObjectifyService.ofy().load().type(Classroom.class).list();
-							    if (classrooms.isEmpty()) {
-							%>
-							        <p>Courses are empty. Shouldn't ever happen. WTF!</p>
-							<%
-							    } 
-							    else {
-							%>
-							        <select class="form-control" 
-							        		id="courseDropDown" 
-							        		name="courseDropDown" 
-							        		style="width: 500px">
-											<%
-											        int i = 0;
-											        for (Classroom classroom : classrooms) {
-											            		pageContext.setAttribute("course_name", 
-											            		classroom.getClassTitle());
-											 %>
-											        	<option value=" ${fn:escapeXml(course_name)} "> 
-											        					${fn:escapeXml(course_name)}
-											            		</option>
-											 <%
-											        }
-											    }				
-											 %>	
-							    	</select>	
-							</div>
-							<h4>Course Location:</h4>
-							
-							<div>
-								<input 	id="latitude"
-										name="latitude"
-										type="number"
-										readonly>
-										
-								<input 	id="longitude"
-										name="longitude"
-										type="number"
-										readonly>
-								
-								<br>
-								
-								<div 	id="map_canvas" 
-										style="height:300px; 
-										width:500px">
-										</div>
-							</div>
-						
+				    <form action="/Register" method="post" onsubmit="return validateForm()" name="registerForm">
 						<div>
-							<input 	type="submit" 
-									name="registerClass" 
-									value="Submit">
-						</div>
-					</form>
+							<p>Professor | Register</p>
+							
+							<p>First Name:
+									<input 	id="first"	
+											name="first">
+							</p>
+								
+							<p>Last Name:
+	
+									<input 	id="last"
+											name="last">
+							</p>
+							
+							<p>Course name:
+	
+								<%
+								    ObjectifyService.register(Classroom.class);
+									ObjectifyService.register(Professor.class);
+									ObjectifyService.register(Student.class);
+									
+									List<Classroom> classrooms = ObjectifyService.ofy().load().type(Classroom.class).list();
+									List<Professor> professors = ObjectifyService.ofy().load().type(Professor.class).list();
+									
+								    if (classrooms.isEmpty()) {
+								%>
+								        <p>Courses are empty. Shouldn't ever happen. WTF!</p>
+								<%
+								    } 
+								    else {
+								%>
+								        <select class="form-control" 
+								        		id="courseDropDown" 
+								        		name="courseDropDown" 
+								        		style="width: 500px">
+												<%
+												        int i = 0;
+												        for (Classroom classroom : classrooms) {
+												            		pageContext.setAttribute("course_name", 
+												            		classroom.getClassTitle());
+												 %>
+												        	<option value=" ${fn:escapeXml(course_name)} "> 
+												        					${fn:escapeXml(course_name)}
+												            		</option>
+												 <%
+												        }
+												    }				
+												 %>	
+								    	</select>	
+								</p>
+								
+								<p>Students:
+									<%
+										Professor thisProfessor = null;
+										for(Professor professor : professors){
+											if (professor.getEmail().equals (user.getEmail().toLowerCase()) ){
+												thisProfessor = professor;
+												break;
+											}
+										}
+									List<String> students = thisProfessor.getStudents();
+									
+									%>
+								
+								<SELECT NAME="studentList" SIZE="10" MULTIPLE >
+								
+									<%
+													for (String student : students) {
+												            		pageContext.setAttribute("student_name", 
+												            		student);
+												 %>
+												        	<option value=" ${fn:escapeXml(student_name)} "> 
+												        					${fn:escapeXml(student_name)}
+												            		</option>
+												 <%
+												        
+												    }				
+												 %>	
+								</SELECT>
+								</p>
+								
+								<p>Course Location:
+								
+	
+									<input 	id="latitude"
+											name="latitude"
+											type="number"
+											readonly>
+											
+									<input 	id="longitude"
+											name="longitude"
+											type="number"
+											readonly>
+								</p>
+									
+									<div 	id="map_canvas" 
+											style="height:300px; 
+											width:500px">
+											</div>
+	
+							
+	
+								<input 	type="submit" 
+										name="registerClass" 
+										value="Submit">
+						</div>				    
+				    
+				    </form>
+					
+					<script>
+					function validateForm()
+					{
+						var firstName=document.forms["registerForm"]["first"].value;
+						var lastName=document.forms["registerForm"]["last"].value;
+						var latitude=document.forms["registerForm"]["latitude"].value;
+						var longitude=document.forms["registerForm"]["longitude"].value;
+						if (firstName==null || firstName=="" 
+								|| lastName==null || lastName==""
+								|| latitude==null || latitude==""
+								|| longitude==null || longitude==""	)
+					 	{
+						  	alert("There are required fields that are not filled in.");
+						  	return false;
+					  	}
+					}
+					</script>
 					
 			</div>
 			

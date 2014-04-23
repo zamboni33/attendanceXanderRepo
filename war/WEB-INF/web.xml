@@ -15,6 +15,32 @@
         <servlet-name>Init</servlet-name>
         <url-pattern>/Init</url-pattern>
     </servlet-mapping>
+    
+<!-- End Debug Init -->  
+    
+<!-- Cron Job -->
+    <servlet>
+        <servlet-name>CheckAttendance</servlet-name>
+        <servlet-class>attendance.servlet.CheckAttendanceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CheckAttendance</servlet-name>
+        <url-pattern>/CheckAttendance</url-pattern>
+    </servlet-mapping>
+    
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>cron</web-resource-name>
+        <url-pattern>/cron/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>admin</role-name>
+    </auth-constraint>
+</security-constraint>  
+    
+<!-- End Cron Job -->   
+
+<!-- Servlets -->
 
 <!-- Sign In -->
     <servlet>
@@ -45,6 +71,8 @@
         <servlet-name>Register</servlet-name>
         <url-pattern>/Register</url-pattern>
     </servlet-mapping>
+    
+<!-- End Servlets -->
   
 <!-- Filter -->
   	<filter>
@@ -54,7 +82,9 @@
 	<filter-mapping>
 		<filter-name>ObjectifyFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>  
+	</filter-mapping>
+	
+<!-- End Filter -->  
   
   
 <!-- Default page to serve -->
