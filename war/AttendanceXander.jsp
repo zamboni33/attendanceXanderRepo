@@ -35,34 +35,20 @@
 				    if (user != null) {
 				    	System.out.println(user);
 				%>
-								
-						<form action="/SignIn" method="get" name="autoForm">
-						</form>
-						
-						<script>
-						window.onload = function(){
-				  			document.autoForm.submit();
-						};
+						<script type="text/javascript">
+							window.location.href= 'http://attendancexander.appspot.com/SignIn';
 						</script>
-					<%
+				<%
 					} 
 				    
 				    else {
 					%>
-						<form method="post" action="">
-						<input type="text" name="UserName" placeholder="Username" id="UserName" size="16" maxlength="16" /><br>
-						<input type="password" name="Password" placeholder="Password" id="Password" size="16" maxlength="16" /><br>
 						<input  type="button" value="Sign In" onclick="window.location.href='SignIn.jsp'"/>
+						<br>
 						<input  type="button" value="Stock DataStore" onclick="window.location.href='Init.jsp'"/>
-						<input name="mapsButton" type="button" rows="1" cols="60" value="Use Map" onClick="locate();"></input>
 				<%
 				    }
-				%>				
-				
-				
-				
-				
-				</form>
+				%>
 				
 			</div>
 			

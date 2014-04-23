@@ -22,36 +22,26 @@
   </head>
  
   <body>
- 
 <%
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
     if (user != null) {
       pageContext.setAttribute("user", user);
       System.out.println("Logged In");
-%>
-		<form action="/SignIn" method="get" name="autoForm">
-
-		</form>
-		
-		<script>
-		window.onload = function(){
-  			document.autoForm.submit();
-		};
+%>	
+		<script type="text/javascript">
+		window.location.href= 'http://attendancexander.appspot.com/SignIn';
 		</script>
-		
 <%
     } else {
     	System.out.println("Logged Out");
 %>
-		<script>
-			window.location.href=("<%= userService.createLoginURL(request.getRequestURI()) %>")
+		<script type="text/javascript">
+			window.location.href=("<%= userService.createLoginURL("http://attendancexander.appspot.com/SignIn") %>")
 		</script>
 <%
     }
-    
     System.out.println("After Log In");    
-
 %>
 
   </body>
