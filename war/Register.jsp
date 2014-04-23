@@ -73,12 +73,14 @@
 						
 						<h4>First Name:</h4>
 							<div>
-								<input 	name="first">
+								<input 	id="first"	
+										name="first">
 							</div>
 							
 						<h4>Last Name:</h4>
 							<div>
-								<input 	name="last">
+								<input 	id="last"
+										name="last">
 							</div>
 							
 						<h4>Course name:</h4>
@@ -132,9 +134,6 @@
 										width:500px">
 										</div>
 							</div>
-							
-						<br>
-						<br>
 						
 						<div>
 							<input 	type="submit" 
@@ -244,11 +243,12 @@
 				
 				</script>	
 				
-				
+<!-- Context Menu Stuff (Deprecated)				 -->
 				<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
 				
 				<script type="text/javascript">
+/*				
 				function getCanvasXY(caurrentLatLng){
 				      var scale = Math.pow(2, map.getZoom());
 				     var nw = new google.maps.LatLng(
@@ -305,9 +305,10 @@
 				$(document).ready(function(){
 					initialize();
 				});
-				
+*/				
 				</script>
-			
+<!-- Context Menu Stuff (Deprecated)				 -->			
+	
 		</div>
 			
 			

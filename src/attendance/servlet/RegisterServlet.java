@@ -42,9 +42,24 @@ public class RegisterServlet extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		
+//		Professor newProfessor = new Professor (req.getParameter("first"), req.getParameter("last"), req.getParameter("username"), req.getParameter("password"), req.getParameter("email"), req.getParameter("coursename"));
+		req.getParameter("first");
+		req.getParameter("last");
+		req.getParameter("course_name");
+		req.getParameter("latitude");
+		req.getParameter("longitude");
 		
+		resp.getWriter().println(req.getParameter("first"));
+		resp.getWriter().println(req.getParameter("last"));
+		resp.getWriter().println(req.getParameter("courseDropDown"));
+		resp.getWriter().println(req.getParameter("latitude"));
+		resp.getWriter().println(req.getParameter("longitude"));
+		
+		
+		
+//		ofy().save().entities(newProfessor).now();
 	
-		resp.sendRedirect("/DashboardProfessor.jsp");
+//		resp.sendRedirect("/DashboardProfessor.jsp");
 		
 	}
 }
