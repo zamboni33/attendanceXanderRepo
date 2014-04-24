@@ -1,46 +1,66 @@
 
 package attendance.entity;
 
+import java.util.HashMap;
+
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-//import com.google.gson.Gson;
-
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
+import java.lang.String;
 
 import javax.jdo.annotations.Persistent;
 
 @Entity
 public class Student {
-	@Id Long id;
-	String email;
+	@Id String email;
 	boolean registered;
+	int courseCount;
+	boolean recordLocation;
 	
-	// Prelim idea: Pass day string as "YYYY-MM-DD". Preserves sorting ability.
+//	// Prelim idea: Pass day string as "YYYY-MM-DD". Preserves sorting ability.
 	@Persistent(serialized="true")
-	Map<String, Boolean> attendance; // = new HashMap<String, Boolean>();
+	HashMap<String, String> legend;
+	@Persistent(serialized="true")
+	HashMap<String, Boolean> course1;
+	@Persistent(serialized="true")
+	HashMap<String, Boolean> course2;
+	@Persistent(serialized="true")
+	HashMap<String, Boolean> course3;
+	@Persistent(serialized="true")
+	HashMap<String, Boolean> course4;
+	@Persistent(serialized="true")
+	HashMap<String, Boolean> course5;
+	
+	/** Use this method to normalize email addresses for lookup */
+	public static String normalize(String email) {
+		return email.toLowerCase();
+	}	
 	
 	static {
 		ObjectifyService.register(Student.class);
 	}
 	
-	public Student (String email)
+	public Student(){}
+	
+	public Student (String email, String course)
 	{
 		this.email = email;
 		this.registered = false;
-		this.attendance = new HashMap<String, Boolean>();
+		this.recordLocation = false;
 		
-		// FOR TESTING PURPOSES ONLY!
-		//assignAbsent("2014-03-31");
+		this.legend = new HashMap<String, String>();   // CourseName, Course1
+		this.course1 = new HashMap<String, Boolean>();
+		this.course2 = new HashMap<String, Boolean>();
+		this.course3 = new HashMap<String, Boolean>();
+		this.course4 = new HashMap<String, Boolean>();
+		this.course5 = new HashMap<String, Boolean>();
+		this.setCourseMap(course);
 		
 	}
-
-	public Student(){}
 	
 	public String getEmail() {
 		return email;
@@ -55,34 +75,58 @@ public class Student {
 		this.registered = eval;
 	}
 	
+	public void startAttendance(){
+		this.recordLocation = true;
+	}
+	public void stopAttendance(){
+		this.recordLocation = false;
+	}
+	
+	public void setCourseMap(String course){
+		this.courseCount += 1;
+		String temp = new String("course" + courseCount);
+		this.legend.put(course, temp);
+	}
+	
+	// Decypher map key
+	
+	public HashMap<String, Boolean> getAttendanceMap(String course){
+		String result = this.legend.get(course);
+		if(result.equals("course1")){
+			return this.course1;
+		}
+		else if(result.equals("course2")){
+			return this.course2;
+		}
+		else if(result.equals("course3")){
+			return this.course3;
+		}
+		else if(result.equals("course4")){
+			return this.course4;
+		}
+		else if(result.equals("course5")){
+			return this.course5;
+		}
+		// WTF Happened!
+		return null;
+	}
 	
 	// Altering Map Data
 	
-	public void assignPresent(String day) {
-		this.attendance.put(day, true);
+	public void assignPresent(HashMap<String, Boolean> attendance, String day) {
+		attendance.put(day, true);
 	}
 	
-	public void assignAbsent(String day) {
-		this.attendance.put(day, false);
+	public void assignAbsent(HashMap<String, Boolean> attendance, String day) {
+		attendance.put(day, false);
 	}
 	
 	// Access Map Data
 	
-	public boolean getAttendance(String day) {
-		return ( this.attendance.get(day) );
-	}
-	
-	public List<String> getKeys () {
+	public List<String> getKeys (HashMap<String, Boolean> attendance) {
 		System.out.println("Retrieving Keys");
 		Set<String> keySet = attendance.keySet();
 		List<String> keys = new ArrayList<String>(keySet);
 		return (keys);
-	}
-	
-	public Set<String> getKeysSafe () {
-		System.out.println("Retrieving Keys");
-		Set<String> keys = attendance.keySet();
-		return (keys);
-	}
-	
+	}		
 }

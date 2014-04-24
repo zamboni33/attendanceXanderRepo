@@ -1,12 +1,12 @@
 package attendance.servlet;
 
 import java.lang.Math;
-
 import java.util.Calendar;
 
 
 public class CheckAttendanceServlet {
 	
+	@SuppressWarnings("unused")
 	public CheckAttendanceServlet(){
 		Calendar c = Calendar.getInstance();
 		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);

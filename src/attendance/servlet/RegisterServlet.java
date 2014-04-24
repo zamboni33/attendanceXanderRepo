@@ -1,6 +1,6 @@
 package attendance.servlet;
  
-import attendance.entity.Classroom;
+import attendance.entity.Course;
 import attendance.entity.Professor;
 import attendance.entity.Student;
 
@@ -13,12 +13,14 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.apphosting.api.DatastorePb.DatastoreService;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.cmd.Query;
 
 import static com.googlecode.objectify.ObjectifyService.ofy; 
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.lang.String;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +37,7 @@ public class RegisterServlet extends HttpServlet {
 	static {
 		ObjectifyService.register(Professor.class);
 		ObjectifyService.register(Student.class);
-		ObjectifyService.register(Classroom.class);
+		ObjectifyService.register(Course.class);
 	}
 
 	// doPost Function
@@ -48,40 +50,43 @@ public class RegisterServlet extends HttpServlet {
 		ObjectifyService.register(Professor.class);
 		ObjectifyService.register(Student.class);
 		
-		List<Professor> professors = ObjectifyService.ofy().load().type(Professor.class).list();
+		// Update Professor Entity
+		Query<Professor> professors = ofy().load().type(Professor.class)
+				.filter("email", Professor.normalize(user.getEmail()) );
 		Professor thisProfessor = null;
 		
 		for(Professor professor : professors ) {
-			// Look for users in the database
-			if (professor.getEmail().equals (user.getEmail().toLowerCase()) ){
+			// Grab professor out of query
 				thisProfessor = professor;
-			}
 		}
 		
-		
-//		Professor newProfessor = new Professor (req.getParameter("first"), req.getParameter("last"), req.getParameter("username"), req.getParameter("password"), req.getParameter("email"), req.getParameter("coursename"));
-		req.getParameter("first");
-		req.getParameter("last");
-		req.getParameter("course_name");
-		req.getParameter("latitude");
-		req.getParameter("longitude");
-		
-		resp.getWriter().println(req.getParameter("first"));
-		resp.getWriter().println(req.getParameter("last"));
-		resp.getWriter().println(req.getParameter("courseDropDown"));
+		thisProfessor.setFirst(req.getParameter("first"));
+		thisProfessor.setLast(req.getParameter("last"));
+		thisProfessor.setRegistered(true);
+		ofy().save().entities(thisProfessor).now();
+		////////////////////
 		
 		List<String> students = thisProfessor.getStudents();
 		for(String student : students){
 			resp.getWriter().println(student);
-		}
-
-		
-		resp.getWriter().println(req.getParameter("latitude"));
-		resp.getWriter().println(req.getParameter("longitude"));
-		
-		
-		
-//		ofy().save().entities(newProfessor).now();
+			
+			Query<Student> queryStudent = ofy().load().type(Student.class)
+					.filter("email", Student.normalize(student) );
+			
+			if(queryStudent.count() != 0){
+				Student existingStudent = null;
+				for(Student scanStudent : queryStudent ) {
+					// Grab professor out of query
+					existingStudent = scanStudent;
+				}
+				existingStudent.setCourseMap(req.getParameter("courseDropDown"));
+				ofy().save().entities(existingStudent).now();
+			}
+			else {
+				Student thisStudent = new Student(student, req.getParameter("courseDropDown"));
+				ofy().save().entities(thisStudent).now();
+			}
+		}				
 	
 //		resp.sendRedirect("/DashboardProfessor.jsp");
 		

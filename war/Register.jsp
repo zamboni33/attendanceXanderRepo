@@ -15,7 +15,7 @@
 
 <%@ page import="attendance.entity.Professor" %>
 <%@ page import="attendance.entity.Student" %>
-<%@ page import="attendance.entity.Classroom" %>
+<%@ page import="attendance.entity.Course" %>
  
 <html>
  
@@ -33,8 +33,8 @@
  
    			<div class="menu">
 				<%
-				    UserService userService = UserServiceFactory.getUserService();
-				    User user = userService.getCurrentUser();
+					UserService userService = UserServiceFactory.getUserService();
+						    User user = userService.getCurrentUser();
 				%>
 				<p>Hello, ${fn:escapeXml(user.email)}!</p> 
 				<br>
@@ -47,7 +47,7 @@
 				 				
 						<script>
 							function SignOut(){
-								window.location.href=(" <%= userService.createLogoutURL("http://attendancexander.appspot.com/")%> ")
+								window.location.href=(" <%=userService.createLogoutURL("http://attendancexander.appspot.com/")%> ")
 							}
 						</script>
 			</div>	
@@ -84,36 +84,37 @@
 							<p>Course name:
 	
 								<%
-								    ObjectifyService.register(Classroom.class);
-									ObjectifyService.register(Professor.class);
-									ObjectifyService.register(Student.class);
-									
-									List<Classroom> classrooms = ObjectifyService.ofy().load().type(Classroom.class).list();
-									List<Professor> professors = ObjectifyService.ofy().load().type(Professor.class).list();
-									
-								    if (classrooms.isEmpty()) {
-								%>
+								ObjectifyService.register(Course.class);
+								ObjectifyService.register(Professor.class);
+								ObjectifyService.register(Student.class);
+								
+								List<Course> courses = ObjectifyService.ofy().load().type(Course.class).list();
+								List<Professor> professors = ObjectifyService.ofy().load().type(Professor.class).list();
+								
+							    if (courses.isEmpty()) {
+														%>
 								        <p>Courses are empty. Shouldn't ever happen. WTF!</p>
 								<%
-								    } 
-								    else {
+								} 
+							    else {
 								%>
-								        <select class="form-control" 
-								        		id="courseDropDown" 
-								        		name="courseDropDown" 
-								        		style="width: 500px">
-												<%
-												        int i = 0;
-												        for (Classroom classroom : classrooms) {
-												            		pageContext.setAttribute("course_name", 
-												            		classroom.getClassTitle());
-												 %>
-												        	<option value=" ${fn:escapeXml(course_name)} "> 
-												        					${fn:escapeXml(course_name)}
-												            		</option>
-												 <%
-												        }
-												    }				
+							        <select class="form-control" 
+							        		id="courseDropDown" 
+							        		name="courseDropDown" 
+							        		style="width: 500px">
+									<%
+									    for(Course course : courses) {
+									        if(course.getProfessor() == null){
+									    				pageContext.setAttribute("course_name", 
+									            		course.getClassTitle());
+									%>
+									        	<option value="${fn:escapeXml(course_name)}"> 
+									        					${fn:escapeXml(course_name)}
+									            		</option>
+									 <%
+									        }
+										}
+								}				
 												 %>	
 								    	</select>	
 								</p>
@@ -138,7 +139,7 @@
 												            		pageContext.setAttribute("student_name", 
 												            		student);
 												 %>
-												        	<option value=" ${fn:escapeXml(student_name)} "> 
+												        	<option value="${fn:escapeXml(student_name)}"> 
 												        					${fn:escapeXml(student_name)}
 												            		</option>
 												 <%
