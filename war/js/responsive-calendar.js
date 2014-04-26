@@ -80,11 +80,11 @@
           this.options.events[dateString] = events[dateString];
           time = this.splitDateString(dateString);
           day = this.$element.find('[data-year="' + time.year + '"][data-month="' + (time.month + 1) + '"][data-day="' + time.day + '"]').parent('.day');
-          day.removeClass('absent');
+          day.removeClass('active');
           day.find('.badge').remove();
           day.find('a').removeAttr('href');
           if (this.currentMonth === time.month || this.options.activateNonCurrentMonths) {
-            _results.push(this.makeAbsent(day, dayEvents));
+            _results.push(this.makeActive(day, dayEvents));
           } else {
             _results.push(void 0);
           }
@@ -99,7 +99,7 @@
           delete this.options.events[dateString];
           time = this.splitDateString(dateString);
           day = this.$element.find('[data-year="' + time.year + '"][data-month="' + (time.month + 1) + '"][data-day="' + time.day + '"]').parent('.day');
-          day.removeClass('absent');
+          day.removeClass('active');
           day.find('.badge').remove();
           _results.push(day.find('a').removeAttr('href'));
         }
@@ -112,7 +112,7 @@
         _results = [];
         for (i = _i = 0, _len = days.length; _i < _len; i = ++_i) {
           day = days[i];
-          $(day).removeClass('absent');
+          $(day).removeClass('active');
           $(day).find('.badge').remove();
           _results.push($(day).find('a').removeAttr('href'));
         }
@@ -165,35 +165,25 @@
         }
         return day;
       },
-      
-      
-      
-      makeAbsentPresent: function(day, dayEvents) {
+      makeActive: function(day, dayEvents) {
         var classes, eventClass, i, _i, _len;
         if (dayEvents) {
-        	if (dayEvents["today"]) {
-        		day.addClass("today");
-        	}
-        	else if (dayEvents["absentPresent"]) {
-        	  day.addClass("present");
-//            classes = dayEvents["class"].split(" ");
-//            for (i = _i = 0, _len = classes.length; _i < _len; i = ++_i) {
-//              eventClass = classes[i];
-//              day.addClass(eventClass);
-//            }
-        	} else {
-        		day.addClass("absent");
+          if (dayEvents["class"]) {
+            classes = dayEvents["class"].split(" ");
+            for (i = _i = 0, _len = classes.length; _i < _len; i = ++_i) {
+              eventClass = classes[i];
+              day.addClass(eventClass);
+            }
+          } else {
+            day.addClass("active");
           }
           day = this.addOthers(day, dayEvents);
         }
         return day;
       },
-      
-      
-      
       getDaysInMonth: function(year, month) {
         return new Date(year, month + 1, 0).getDate();
-      },    
+      },
       drawDay: function(lastDayOfMonth, yearNum, monthNum, dayNum, i) {
         var calcDate, dateNow, dateString, day, dayDate, pastFutureClass;
         day = $("<div></div>").addClass("day");
@@ -225,13 +215,7 @@
           this.applyTransform(day, 'rotateY(180deg)');
           this.applyBackfaceVisibility(day);
         }
-        
-        
-        
-        day = this.makeAbsentPresent(day, this.options.events[dateString]);
-        
-        
-        
+        day = this.makeActive(day, this.options.events[dateString]);
         return this.$element.find('[data-group="days"]').append(day);
       },
       drawDays: function(year, month) {
@@ -293,14 +277,14 @@
                 return thisRef.options.onDayHover.call(this, thisRef.options.events);
               });
             }
-            if (thisRef.options.onAbsentDayClick) {
-              thisRef.$element.find('[data-group="days"] .day.absent a').click(function() {
-                return thisRef.options.onAbsentDayClick.call(this, thisRef.options.events);
+            if (thisRef.options.onActiveDayClick) {
+              thisRef.$element.find('[data-group="days"] .day.active a').click(function() {
+                return thisRef.options.onActiveDayClick.call(this, thisRef.options.events);
               });
             }
-            if (thisRef.options.onAbsentDayHover) {
-              return thisRef.$element.find('[data-group="days"] .day.absent a').hover(function() {
-                return thisRef.options.onAbsentDayHover.call(this, thisRef.options.events);
+            if (thisRef.options.onActiveDayHover) {
+              return thisRef.$element.find('[data-group="days"] .day.active a').hover(function() {
+                return thisRef.options.onActiveDayHover.call(this, thisRef.options.events);
               });
             }
           };
@@ -368,8 +352,8 @@
       onInit: void 0,
       onDayClick: void 0,
       onDayHover: void 0,
-      onAbsentDayClick: void 0,
-      onAbsentDayHover: void 0,
+      onActiveDayClick: void 0,
+      onActiveDayHover: void 0,
       onMonthChange: void 0
     };
     spy = $('[data-spy="responsive-calendar"]');
