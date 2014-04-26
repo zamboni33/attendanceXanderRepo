@@ -36,7 +36,7 @@
 				    	System.out.println(user);
 				%>
 						<script type="text/javascript">
-							window.location.href= 'http://attendancexander.appspot.com/SignIn';
+							window.location.href= '/SignIn.jsp';
 						</script>
 				<%
 					} 

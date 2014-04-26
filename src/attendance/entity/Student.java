@@ -20,6 +20,8 @@ public class Student {
 	boolean registered;
 	int courseCount;
 	boolean recordLocation;
+	double latitude;
+	double longitude;
 	
 //	// Prelim idea: Pass day string as "YYYY-MM-DD". Preserves sorting ability.
 	@Persistent(serialized="true")
@@ -51,6 +53,8 @@ public class Student {
 		this.email = email;
 		this.registered = false;
 		this.recordLocation = false;
+		this.latitude = 0.0;
+		this.longitude = 0.0;
 		
 		this.legend = new HashMap<String, String>();   // CourseName, Course1
 		this.course1 = new HashMap<String, Boolean>();
@@ -75,12 +79,29 @@ public class Student {
 		this.registered = eval;
 	}
 	
+	public boolean getAttendance(){
+		return this.recordLocation;
+	}
+
 	public void startAttendance(){
 		this.recordLocation = true;
 	}
 	public void stopAttendance(){
 		this.recordLocation = false;
 	}
+	
+	public double getLatitude() {
+		return this.latitude;
+	}
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	public double getLongitude() {
+		return this.longitude;
+	}
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}	
 	
 	public void setCourseMap(String course){
 		this.courseCount += 1;

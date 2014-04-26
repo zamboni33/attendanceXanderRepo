@@ -49,7 +49,8 @@ public class SignInServlet extends HttpServlet {
 			resp.sendRedirect("/DashboardStudent.jsp");
 		}
 		else{
-			resp.sendRedirect("/Register.jsp");
+//			resp.sendRedirect("/Register.jsp");
+			resp.sendRedirect("/DashboardStudent.jsp");
 		}
 	}	
 	

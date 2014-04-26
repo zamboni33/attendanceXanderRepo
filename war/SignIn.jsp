@@ -30,14 +30,14 @@
       System.out.println("Logged In");
 %>	
 		<script type="text/javascript">
-		window.location.href= 'http://attendancexander.appspot.com/SignIn';
+		window.location.href= '/SignIn';
 		</script>
 <%
     } else {
     	System.out.println("Logged Out");
 %>
 		<script type="text/javascript">
-			window.location.href=("<%= userService.createLoginURL("http://attendancexander.appspot.com/SignIn") %>")
+			window.location.href=("<%= userService.createLoginURL("/SignIn") %>")
 		</script>
 <%
     }

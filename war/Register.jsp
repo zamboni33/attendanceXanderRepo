@@ -10,6 +10,7 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="com.googlecode.objectify.Objectify" %>
 <%@ page import="com.googlecode.objectify.ObjectifyService" %>
+<%@ page import="com.googlecode.objectify.cmd.Query"%>
 
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -29,28 +30,7 @@
 <script
     src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 
- </head>
- 
-   			<div class="menu">
-				<%
-					UserService userService = UserServiceFactory.getUserService();
-						    User user = userService.getCurrentUser();
-				%>
-				<p>Hello, ${fn:escapeXml(user.email)}!</p> 
-				<br>
-				
-				Not you?
-				
-				 		<input 	type="button" 
-				 				onclick="SignOut();" 
-				 				value="Sign Out">
-				 				
-						<script>
-							function SignOut(){
-								window.location.href=(" <%=userService.createLogoutURL("http://attendancexander.appspot.com/")%> ")
-							}
-						</script>
-			</div>	
+ </head>	
  
   <body>
  
@@ -61,6 +41,49 @@
 	<div class="main-wrap">	
 	
 		<div class="container">
+		
+		<script type="text/javascript">
+		window.onload = initializePosition();
+		</script>
+		
+		<%
+		    UserService userService = UserServiceFactory.getUserService();
+		    User user = userService.getCurrentUser();
+		    if (user != null) {
+		      pageContext.setAttribute("userEmail", user.getEmail());
+		    }
+		    
+			Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
+							.filter("email", Student.normalize(user.getEmail()) );
+			
+			for(Student student : queryStudent ) {
+				if(student.getAttendance() == true){
+					student.setLatitude((double) pageContext.getAttribute("userLatitude"));
+					student.setLatitude((double) pageContext.getAttribute("userLatitude"));
+				}
+			}	
+		%>
+		
+		   	<div class="menu">
+				<p>Hello, ${fn:escapeXml(userEmail)}!</p> 
+				<br>
+				
+				Not you?
+				
+				 		<input 	type="button" 
+				 				onclick="SignOut();" 
+				 				value="Sign Out">
+				 				
+						<script>
+							function SignOut(){
+								window.location.href=(" <%=userService.createLogoutURL("/")%> ")
+							}
+						</script>
+			</div>
+		
+		
+		
+		
 			
 			<div class="content">
 			
@@ -206,11 +229,30 @@
 			<input 		id="locationButton" 
 						type="button" 
 						onclick="initializePosition()" 
-						value="Use Current Location">			
+						value="Use Current Location">
+						
+			<form action="/SaveClassroom" method="post" name="classroomForm">
+					<input 	id="classroomName"
+							name="classroomName">
+					
+					<input 	id="classroomLat"
+							name="classroomLat"
+							type="number"
+							readonly>
+							
+					<input 	id="classroomLon"
+							name="classroomLon"
+							type="number"
+							readonly>
+							
+			<input		id="SubmitClassroom"
+						type="submit"
+						value="Submit Classroom">
+			</form>
 			
 			<script type="text/javascript">
 			var map;
-			var austin = new google.maps.LatLng(30.2500, -97.7500);
+			var austin = new google.maps.LatLng(30.286142,-97.739343);
 			
 			function displayMap() {
 				if (document.getElementById('map_canvas').style.display != "block"){
@@ -225,7 +267,7 @@
 			
 			function initialize() {
 			  var mapOptions = {
-			    zoom: 8,
+			    zoom: 10,
 			    center: new google.maps.LatLng(30.2500, -97.7500)
 			  };
 			  map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
@@ -268,6 +310,8 @@
 // 			      alert(position.coords.latitude);
 			      document.getElementById('latitude').value = position.coords.latitude;
 			      document.getElementById('longitude').value = position.coords.longitude;
+			      document.getElementById('classroomLat').value = position.coords.latitude;
+			      document.getElementById('classroomLon').value = position.coords.longitude;
 // 			      map.setCenter(initialLocation);
 			    }, function() {
 			      handleNoGeolocation(browserSupportFlag);

@@ -18,14 +18,23 @@
     
 <!-- End Debug Init -->  
     
-<!-- Cron Job -->
+<!-- Cron Jobs -->
     <servlet>
-        <servlet-name>CheckAttendance</servlet-name>
-        <servlet-class>attendance.servlet.CheckAttendanceServlet</servlet-class>
+        <servlet-name>StartAttendance</servlet-name>
+        <servlet-class>attendance.servlet.StartAttendanceServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>CheckAttendance</servlet-name>
-        <url-pattern>/CheckAttendance</url-pattern>
+        <servlet-name>StartAttendance</servlet-name>
+        <url-pattern>/StartAttendance</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>StopAttendance</servlet-name>
+        <servlet-class>attendance.servlet.StopAttendanceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StopAttendance</servlet-name>
+        <url-pattern>/StopAttendance</url-pattern>
     </servlet-mapping>
     
 <security-constraint>
@@ -71,6 +80,26 @@
         <servlet-name>Register</servlet-name>
         <url-pattern>/Register</url-pattern>
     </servlet-mapping>
+    
+<!-- Save Classroom -->
+    <servlet>
+        <servlet-name>SaveClassroom</servlet-name>
+        <servlet-class>attendance.servlet.SaveClassroomServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SaveClassroom</servlet-name>
+        <url-pattern>/SaveClassroom</url-pattern>
+    </servlet-mapping>
+    
+<!-- Locate -->
+    <servlet>
+        <servlet-name>Locate</servlet-name>
+        <servlet-class>attendance.servlet.LocateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Locate</servlet-name>
+        <url-pattern>/Locate</url-pattern>
+    </servlet-mapping>    
     
 <!-- End Servlets -->
   

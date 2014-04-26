@@ -1,5 +1,6 @@
 package attendance.servlet;
  
+import attendance.entity.Classroom;
 import attendance.entity.Course;
 import attendance.entity.Professor;
 import attendance.entity.Student;
@@ -38,6 +39,7 @@ public class RegisterServlet extends HttpServlet {
 		ObjectifyService.register(Professor.class);
 		ObjectifyService.register(Student.class);
 		ObjectifyService.register(Course.class);
+		ObjectifyService.register(Classroom.class);
 	}
 
 	// doPost Function
@@ -84,11 +86,12 @@ public class RegisterServlet extends HttpServlet {
 			}
 			else {
 				Student thisStudent = new Student(student, req.getParameter("courseDropDown"));
+//				thisStudent.startAttendance();
 				ofy().save().entities(thisStudent).now();
 			}
 		}				
 	
-//		resp.sendRedirect("/DashboardProfessor.jsp");
+		resp.sendRedirect("/DashboardProfessor.jsp");
 		
 	}
 }

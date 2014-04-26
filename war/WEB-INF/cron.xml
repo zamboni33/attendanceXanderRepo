@@ -7,4 +7,12 @@
     <timezone>America/Chicago</timezone>
     <target>version-1</target>
   </cron>
+  
+<!--    <cron> -->
+<!--     <url>/ShutOffAttendance</url> -->
+<!--     <description>Check Courses for Attendance as Necessary</description> -->
+<!--     <schedule>every 30 minutes from 06:15 to 20:15</schedule> -->
+<!--     <timezone>America/Chicago</timezone> -->
+<!--     <target>version-1</target> -->
+<!--   </cron> -->
 </cronentries>

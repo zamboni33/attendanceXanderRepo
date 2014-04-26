@@ -13,8 +13,9 @@ public class Course {
 	@Id String classUnique;
 	double latitude;
 	double longitude;
-	ArrayList<String> days;
-	ArrayList<Integer> times;
+	ArrayList<Integer> days;
+	ArrayList<String> times;
+	ArrayList<String> students;
 	
 	String professor;
 
@@ -32,10 +33,11 @@ public class Course {
 		this.days = null;
 		this.times = null;
 		this.professor = null;
+		this.students = null;
 	}
 	
 	public Course(String roomNumber, String classTitle, String classUnique, 
-					ArrayList<String> days, ArrayList<Integer> times){
+					ArrayList<Integer> days, ArrayList<String> times, ArrayList<String> students){
 		
 		
 		this.roomNumber = new String(roomNumber); 
@@ -48,6 +50,7 @@ public class Course {
 		
 		this.days = days;
 		this.times = times;
+		this.students = students;
 	}
 	
 	// Copy Constructor
@@ -104,17 +107,24 @@ public class Course {
 		this.professor = professor.getEmail();
 	}	
 	
-	public ArrayList<String> getDays() {
+	public ArrayList<Integer> getDays() {
 		return this.days;
 	}
-	public void setDays(ArrayList<String> schedule) {
+	public void setDays(ArrayList<Integer> schedule) {
 		this.days = schedule;
 	}
 	
-	public ArrayList<Integer> getTimes() {
+	public ArrayList<String> getTimes() {
 		return this.times;
 	}
-	public void setTimes(ArrayList<Integer> schedule) {
+	public void setTimes(ArrayList<String> schedule) {
 		this.times = schedule;
+	}
+	
+	public ArrayList<String> getStudents() {
+		return this.students;
+	}
+	public void setStudents(ArrayList<String> students) {
+		this.students = students;
 	}
 }

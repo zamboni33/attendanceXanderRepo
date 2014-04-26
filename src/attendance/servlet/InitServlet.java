@@ -56,9 +56,15 @@ public class InitServlet extends HttpServlet {
 			students.add(sally);
 			String rachael = new String("rachael@utexas.edu");
 			students.add(rachael);
+			String alexander = new String("a.balette@utexas.edu");
+			students.add(alexander);
+			String lucas = new String("lucascf@utexas.edu");
+			students.add(lucas);
 			
 			Professor newProfessor = new Professor (req.getParameter("email"), students);
 			ofy().save().entities(newProfessor).now();
+			Professor newProfessor2 = new Professor ("lucascoelhof@gmail.com", students);
+			ofy().save().entities(newProfessor2).now();
 			
 //			Query<Professor> fetched = ofy().load().type(Professor.class).filter("email", req.getParameter("email") );
 //			Professor thisProfessor = null;
@@ -67,17 +73,17 @@ public class InitServlet extends HttpServlet {
 //			}
 			
 			
-			ArrayList<String> days = new ArrayList<String>();
-			days.add("M");
-			days.add("W");
-			days.add("F");
-			ArrayList<Integer> times = new ArrayList<Integer>();
-			times.add(900);
+			ArrayList<Integer> days = new ArrayList<Integer>();
+			days.add(2);
+			days.add(4);
+			days.add(6);
+			ArrayList<String> times = new ArrayList<String>();
+			times.add("9:00");
 			Course newCourse = new Course ("CPE 2.238", "Software Development", "12345", 
-												days, times);
+												days, times, students);
 			ofy().save().entities(newCourse).now();
 			Course newCourse2 = new Course ("CPE 2.238", "Basket Weaving", "67890", 
-					days, times);
+												days, times, students);
 			ofy().save().entities(newCourse2).now();
 		}
 		resp.sendRedirect("/");
