@@ -5,6 +5,7 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="com.googlecode.objectify.ObjectifyService" %>
+<%@ page import="com.googlecode.objectify.cmd.Query" %>
 <%@ page import="attendance.entity.Professor" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -35,8 +36,10 @@
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
     
-    ObjectifyService.register(Professor.class);
-	List<Professor> professors = ObjectifyService.ofy().load().type(Professor.class).list();
+//     ObjectifyService.register(Professor.class);
+// 	List<Professor> professors = ObjectifyService.ofy().load().type(Professor.class).list();
+Query<Professor> professors = ObjectifyService.ofy().load().type(Professor.class)
+									.filter("email", Professor.normalize(user.getEmail()) );
 	%> 
   </head>
   <body>
@@ -45,11 +48,7 @@
   	Professor actualProfessor = null;
   	for (Professor p : professors)
   	{
-  		if(p.getEmail().equals(user.getEmail()))
-  		{
   			actualProfessor = p;
-  			break;
-  		}
   	}
   	pageContext.setAttribute("prof_first",
 			actualProfessor.getFirst());

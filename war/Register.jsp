@@ -130,9 +130,12 @@
 									        if(course.getProfessor() == null){
 									    				pageContext.setAttribute("course_name", 
 									            		course.getClassTitle());
+									    				pageContext.setAttribute("course_unique", 
+											            		course.getClassUnique());
+									    				
 									%>
-									        	<option value="${fn:escapeXml(course_name)}"> 
-									        					${fn:escapeXml(course_name)}
+									        	<option value="${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}"> 
+									        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
 									            		</option>
 									 <%
 									        }

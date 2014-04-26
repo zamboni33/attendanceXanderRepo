@@ -1,5 +1,6 @@
 package attendance.servlet;
  
+import attendance.entity.Attendance;
 import attendance.entity.Classroom;
 import attendance.entity.Course;
 import attendance.entity.Professor;
@@ -40,6 +41,7 @@ public class RegisterServlet extends HttpServlet {
 		ObjectifyService.register(Student.class);
 		ObjectifyService.register(Course.class);
 		ObjectifyService.register(Classroom.class);
+		ObjectifyService.register(Attendance.class);
 	}
 
 	// doPost Function
@@ -81,13 +83,30 @@ public class RegisterServlet extends HttpServlet {
 					// Grab professor out of query
 					existingStudent = scanStudent;
 				}
-				existingStudent.setCourseMap(req.getParameter("courseDropDown"));
+				
+				String attendanceKey = new String(req.getParameter("courseDropDown") + Student.normalize(student));
+				
+				String[] parts = attendanceKey.split(": ");
+				attendanceKey = parts[1];
+				
+				existingStudent.setAttendanceKey(attendanceKey);
 				ofy().save().entities(existingStudent).now();
+				
+				Attendance newAttendance = new Attendance(attendanceKey);
+				ofy().save().entities(newAttendance).now();
 			}
 			else {
+				String attendanceKey = new String(req.getParameter("courseDropDown") + Student.normalize(student));
+				
+				String[] parts = attendanceKey.split(":");
+				attendanceKey = parts[1];
+				
 				Student thisStudent = new Student(student, req.getParameter("courseDropDown"));
 //				thisStudent.startAttendance();
 				ofy().save().entities(thisStudent).now();
+				
+				Attendance newAttendance = new Attendance(attendanceKey);
+				ofy().save().entities(newAttendance).now();
 			}
 		}				
 	
