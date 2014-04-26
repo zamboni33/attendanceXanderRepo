@@ -48,9 +48,9 @@ public class Course {
 		
 		this.professor = null;
 		
-		this.days = days;
-		this.times = times;
-		this.students = students;
+		this.days = new ArrayList<Integer>(days);
+		this.times = new ArrayList<String>(times);
+		this.students = new ArrayList<String>(students);
 	}
 	
 	// Copy Constructor

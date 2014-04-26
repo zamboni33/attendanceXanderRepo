@@ -77,8 +77,9 @@ public class InitServlet extends HttpServlet {
 			days.add(2);
 			days.add(4);
 			days.add(6);
+			days.add(7);
 			ArrayList<String> times = new ArrayList<String>();
-			times.add("9:00");
+			times.add("17:55");
 			Course newCourse = new Course ("CPE 2.238", "Software Development", "12345", 
 												days, times, students);
 			ofy().save().entities(newCourse).now();

@@ -48,7 +48,7 @@ public class Student {
 		return email;
 	}
 	public void setEmail(String email) {
-		this.email = email;
+		this.email = Student.normalize(email);
 	}
 	public boolean getRegistered() {
 		return registered;

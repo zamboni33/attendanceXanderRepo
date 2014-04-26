@@ -43,7 +43,12 @@ public class StartAttendanceServlet extends HttpServlet {
 	}
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {	
+			throws IOException {
+		
+		Student cron = new Student("CronJob", "Fired");
+		ofy().save().entities(cron).now();
+		
+		
 		Calendar c = Calendar.getInstance();
 		dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -55,8 +60,15 @@ public class StartAttendanceServlet extends HttpServlet {
 		List<Course> courses = ObjectifyService.ofy().load().type(Course.class).list();	
 		for(Course course : courses ) {
 			
+			Student cron2 = new Student(course.getClassTitle(), course.getDays().toString());
+			ofy().save().entities(cron2).now();
+			
 			if(course.getDays().contains(dayOfWeek)){
 				ArrayList<String> times = course.getTimes();
+				
+				Student cron3 = new Student(course.getClassTitle(), course.getTimes().toString());
+				ofy().save().entities(cron3).now();
+				
 				for(String time : times){
 					String[] parts = time.split(":");
 					if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) == minuteOfDay){
@@ -65,6 +77,7 @@ public class StartAttendanceServlet extends HttpServlet {
 							Query<Student> students = ofy().load().type(Student.class).filter("email", studentEmail );
 							for(Student student : students ) {
 								student.startAttendance();
+								ofy().save().entities(student).now();
 							}
 						}
 					}

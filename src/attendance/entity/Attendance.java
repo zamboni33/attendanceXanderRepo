@@ -33,11 +33,11 @@ public class Attendance {
 
 	// Altering Map Data
 	
-	public void assignPresent(HashMap<String, Boolean> attendance, String day) {
+	public void assignPresent(String day) {
 		attendance.put(day, true);
 	}
 	
-	public void assignAbsent(HashMap<String, Boolean> attendance, String day) {
+	public void assignAbsent(String day) {
 		attendance.put(day, false);
 	}
 	

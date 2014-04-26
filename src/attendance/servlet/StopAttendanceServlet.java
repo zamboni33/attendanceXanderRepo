@@ -18,6 +18,7 @@ import attendance.entity.Classroom;
 import attendance.entity.Course;
 import attendance.entity.Professor;
 import attendance.entity.Student;
+import attendance.entity.Attendance;
 
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.cmd.Query;
@@ -47,7 +48,9 @@ public class StopAttendanceServlet extends HttpServlet {
 			throws IOException {	
 		Calendar c = Calendar.getInstance();
 		dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+		DateFormat dateFormatCalendar = new SimpleDateFormat("yyyy-MM-dd");
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        String dateCalendar = dateFormatCalendar.format(c.getTime());
         String dateTotal = dateFormat.format(c.getTime());
         String[] timeParts = dateTotal.split(":");
 		hourOfDay = Integer.parseInt(timeParts[0]);
@@ -66,11 +69,44 @@ public class StopAttendanceServlet extends HttpServlet {
 							Query<Student> students = ofy().load().type(Student.class).filter("email", studentEmail );
 							for(Student student : students ) {
 								student.stopAttendance();
+							
+								if(student.getLatitude() != 0.0 && student.getLongitude() != 0.0){
+		//							TODO THIS IS WHERE WE RUN THE HAVERSINE AND MARK ATTENDANT OR ABSENT
+									Double distance = haversine(course.getLatitude(), course.getLongitude(),
+															student.getLatitude(), student.getLongitude());
+								
+									if(distance < 50){
+										String attendanceKey = new String(course.getClassUnique() + student.getEmail());
+										Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
+										for(Attendance dayTable : attendance){
+											dayTable.assignPresent(dateCalendar);
+											ofy().save().entities(dayTable).now();
+										}
+									}
+									else{
+										String attendanceKey = new String(course.getClassUnique() + student.getEmail());
+										Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
+										for(Attendance dayTable : attendance){
+											dayTable.assignAbsent(dateCalendar);
+											ofy().save().entities(dayTable).now();
+										}
+									}
+								}
+								else {
+									String attendanceKey = new String(course.getClassUnique() + student.getEmail());
+									Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
+									for(Attendance dayTable : attendance){
+										dayTable.assignAbsent(dateCalendar);
+										ofy().save().entities(dayTable).now();
+									}
+								}
+								
+								student.setLatitude(0.0);
+								student.setLongitude(0.0);
+								
+								ofy().save().entities(student).now();
+								
 							}
-							
-//							TODO THIS IS WHERE WE RUN THE HAVERSINE AND MARK ATTENDANT OR ABSENT
-							
-							
 							
 						}
 					}
