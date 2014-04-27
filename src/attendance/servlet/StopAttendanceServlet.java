@@ -134,21 +134,36 @@ public class StopAttendanceServlet extends HttpServlet {
 										String attendanceKey = new String(course.getClassUnique() + student.getEmail());
 										Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
 										for(Attendance dayTable : attendance){
+											
+											Attendance temp = new Attendance(dayTable.getAttendanceKey());
+											HashMap<String, Boolean> tempMap = new HashMap<String, Boolean>(dayTable.getAttendance());
+											temp.setAttendance(tempMap);
+											temp.assignAbsent(dateCalendar);
+											
+//											resp.getWriter().println(tempMap.toString());
+											
+											ofy().save().entities(temp).now();
+											
 //											dayTable.assignAbsent(dateCalendar);
-											ofy().save().entities(dayTable).now();
+//											ofy().save().entities(dayTable).now();
 										}
 									}
 								}
 								else {
 									String attendanceKey = new String(course.getClassUnique() + student.getEmail());
-									Student cron8 = new Student("Test8", attendanceKey);
-									ofy().save().entities(cron8).now();
 									Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
 									for(Attendance dayTable : attendance){
+										
+										Student cron8 = new Student("Test8", attendanceKey);
+										ofy().save().entities(cron8).now();
+										
 										Attendance temp = new Attendance(dayTable.getAttendanceKey());
 										HashMap<String, Boolean> tempMap = new HashMap<String, Boolean>(dayTable.getAttendance());
-										temp.assignAbsent(dateCalendar);										
 										temp.setAttendance(tempMap);
+										temp.assignAbsent(dateCalendar);
+										
+//										resp.getWriter().println(tempMap.toString());
+										
 										ofy().save().entities(temp).now();
 										
 //										dayTable.assignAbsent(dateCalendar);
