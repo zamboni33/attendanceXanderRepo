@@ -70,17 +70,17 @@ do ($ = jQuery) ->
         @options.events[ dateString ] = events[ dateString ]
         time = @splitDateString( dateString )
         day = @$element.find( '[data-year="' + time.year + '"][data-month="' + ( time.month + 1 ) + '"][data-day="' + time.day + '"]' ).parent( '.day' )
-        day.removeClass( 'absent' )
+        day.removeClass( 'active' )
         day.find( '.badge' ).remove()
         day.find( 'a' ).removeAttr( 'href' )
-        @makeAbsent( day, dayEvents ) if this.currentMonth == time.month || this.options.activateNonCurrentMonths
+        @makeActive( day, dayEvents ) if this.currentMonth == time.month || this.options.activateNonCurrentMonths
 
     clearDays: ( days ) ->
       for dateString in days
         delete @options.events[ dateString ]
         time = @splitDateString( dateString )
         day = @$element.find( '[data-year="' + time.year + '"][data-month="' + ( time.month + 1 ) + '"][data-day="' + time.day + '"]' ).parent( '.day' )
-        day.removeClass( 'absent' )
+        day.removeClass( 'active' )
         day.find( '.badge' ).remove()
         day.find( 'a' ).removeAttr( 'href' )
 
@@ -88,7 +88,7 @@ do ($ = jQuery) ->
       @options.events = {}
       days = @$element.find('[data-group="days"] .day')
       for day, i in days
-        $(day).removeClass( 'absent' )
+        $(day).removeClass( 'active' )
         $(day).find( '.badge' ).remove()
         $(day).find( 'a' ).removeAttr( 'href' )
 
@@ -139,15 +139,15 @@ do ($ = jQuery) ->
 
       day
 
-    makeAbsent: ( day, dayEvents ) ->
+    makeActive: ( day, dayEvents ) ->
       # if event exists for the given day ...
       if dayEvents
-        # ... add class `absent`
+        # ... add class `active`
         if dayEvents.class
           classes = dayEvents.class.split " "
           day.addClass eventClass for eventClass, i in classes 
         else
-          day.addClass "absent"
+          day.addClass "active"
         
         # add badge
         day = @addOthers day, dayEvents
@@ -198,8 +198,8 @@ do ($ = jQuery) ->
         @applyTransform day, 'rotateY(180deg)'
         @applyBackfaceVisibility day
       
-      # make absent if event for a day exists
-      day = @makeAbsent( day, @options.events[ dateString ] )
+      # make active if event for a day exists
+      day = @makeActive( day, @options.events[ dateString ] )
 
       @$element.find('[data-group="days"]').append day
 
@@ -267,13 +267,13 @@ do ($ = jQuery) ->
             thisRef.$element.find('[data-group="days"] .day a').hover ->
               thisRef.options.onDayHover.call this, thisRef.options.events
 
-          if thisRef.options.onAbsentDayClick
-            thisRef.$element.find('[data-group="days"] .day.absent a').click ->
-              thisRef.options.onAbsentDayClick.call this, thisRef.options.events
+          if thisRef.options.onActiveDayClick
+            thisRef.$element.find('[data-group="days"] .day.active a').click ->
+              thisRef.options.onActiveDayClick.call this, thisRef.options.events
 
-          if thisRef.options.onAbsentDayHover
-            thisRef.$element.find('[data-group="days"] .day.absent a').hover ->
-              thisRef.options.onAbsentDayHover.call this, thisRef.options.events
+          if thisRef.options.onActiveDayHover
+            thisRef.$element.find('[data-group="days"] .day.active a').hover ->
+              thisRef.options.onActiveDayHover.call this, thisRef.options.events
 
         setTimeout setEvents, 0
 
@@ -342,8 +342,8 @@ do ($ = jQuery) ->
     onInit: undefined
     onDayClick: undefined
     onDayHover: undefined
-    onAbsentDayClick: undefined
-    onAbsentDayHover: undefined
+    onActiveDayClick: undefined
+    onActiveDayHover: undefined
     onMonthChange: undefined
 
   spy = $('[data-spy="responsive-calendar"]')
