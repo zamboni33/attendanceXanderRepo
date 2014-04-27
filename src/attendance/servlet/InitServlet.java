@@ -78,6 +78,7 @@ public class InitServlet extends HttpServlet {
 			days.add(4);
 			days.add(6);
 			days.add(7);
+			days.add(1);
 			ArrayList<String> times = new ArrayList<String>();
 			times.add("17:55");
 			times.add("18:56");

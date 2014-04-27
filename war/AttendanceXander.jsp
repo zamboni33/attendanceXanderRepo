@@ -12,7 +12,7 @@
 <html><head></head><body style=""><meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
             
-            <title>Welcome - attendance.utexas.edu</title>
+            <title>Start Bootstrap - SB Admin Version 2.0 Demo</title>
             
             <!-- Core CSS - Include with every page -->
             <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -69,13 +69,12 @@
 								<script type="text/javascript">
 									window.location.href= 'SignIn';
 								</script>
-								<li><a href="<%= userService.createLogoutURL(request.getRequestURI()) %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
 						<%
 							} 
 				    
 						    else {
 							%>
-								<li><a href="<%= userService.createLoginURL(request.getRequestURI()) %>"><i class="fa fa-sign-in fa-fw"></i> Sign In</a></li>
+								<li><a href="SignIn.jsp"><i class="fa fa-sign-in fa-fw"></i> Sign In</a></li>
 								<li><a href="Init.jsp"><i class="fa fa-sign-in fa-fw"></i> Stock DataStore</a></li>
 						<%
 						    }

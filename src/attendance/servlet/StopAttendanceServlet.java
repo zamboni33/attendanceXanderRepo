@@ -5,6 +5,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 import java.io.IOException;
 import java.lang.Math;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.TimeZone;
@@ -65,6 +66,7 @@ public class StopAttendanceServlet extends HttpServlet {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         DateFormat dateFormatCalendar = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setTimeZone(TimeZone.getTimeZone("CST"));
+        dateFormatCalendar.setTimeZone(TimeZone.getTimeZone("CST"));
         
         String dateTotal = dateFormat.format(c.getTime());
         String dateCalendar = new String(dateFormatCalendar.format(c.getTime()));
@@ -75,20 +77,20 @@ public class StopAttendanceServlet extends HttpServlet {
 		List<Course> courses = ObjectifyService.ofy().load().type(Course.class).list();	
 		for(Course course : courses ) {
 			
-//										Student cron2 = new Student("Test 2", course.getDays().toString());
-//										ofy().save().entities(cron2).now();
+										Student cron2 = new Student("Test 2", course.getDays().toString());
+										ofy().save().entities(cron2).now();
 			
 			if(course.getDays().contains(dayOfWeek)){
 				ArrayList<String> times = course.getTimes();
 				
-//											Student cron3 = new Student("Test3", course.getTimes().toString());
-//											ofy().save().entities(cron3).now();
-//											
-//											Student cron4 = new Student("Test4", Integer.toString(hourOfDay));
-//											ofy().save().entities(cron4).now();
-//											
-//											Student cron5 = new Student("Test5", Integer.toString(minuteOfDay));
-//											ofy().save().entities(cron5).now();
+											Student cron3 = new Student("Test3", course.getTimes().toString());
+											ofy().save().entities(cron3).now();
+											
+											Student cron4 = new Student("Test4", Integer.toString(hourOfDay));
+											ofy().save().entities(cron4).now();
+											
+											Student cron5 = new Student("Test5", Integer.toString(minuteOfDay));
+											ofy().save().entities(cron5).now();
 				
 				for(String time : times){
 					String[] parts = time.split(":");
@@ -99,6 +101,9 @@ public class StopAttendanceServlet extends HttpServlet {
 							
 							Student cron6 = new Student("Test6", studentEmail);
 							ofy().save().entities(cron6).now();
+							
+							Student cron7 = new Student("Test7", dateCalendar);
+							ofy().save().entities(cron7).now();
 							
 							
 							Query<Student> students = ofy().load().type(Student.class).filter("email", studentEmail );
@@ -111,14 +116,17 @@ public class StopAttendanceServlet extends HttpServlet {
 							
 								if(student.getLatitude() != 0.0 && student.getLongitude() != 0.0){
 		//							TODO THIS IS WHERE WE RUN THE HAVERSINE AND MARK ATTENDANT OR ABSENT
-									Double distance = haversine(course.getLatitude(), course.getLongitude(),
-															student.getLatitude(), student.getLongitude());
+									Double distance = new Double (haversine(course.getLatitude(), course.getLongitude(),
+															student.getLatitude(), student.getLongitude()));
 								
+									Student cron9 = new Student("Test9", distance.toString());
+									ofy().save().entities(cron9).now();
+									
 									if(distance < 50){
 										String attendanceKey = new String(course.getClassUnique() + student.getEmail());
 										Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
 										for(Attendance dayTable : attendance){
-											dayTable.assignPresent(dateCalendar);
+//											dayTable.assignPresent(dateCalendar);
 											ofy().save().entities(dayTable).now();
 										}
 									}
@@ -126,17 +134,25 @@ public class StopAttendanceServlet extends HttpServlet {
 										String attendanceKey = new String(course.getClassUnique() + student.getEmail());
 										Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
 										for(Attendance dayTable : attendance){
-											dayTable.assignAbsent(dateCalendar);
+//											dayTable.assignAbsent(dateCalendar);
 											ofy().save().entities(dayTable).now();
 										}
 									}
 								}
 								else {
 									String attendanceKey = new String(course.getClassUnique() + student.getEmail());
+									Student cron8 = new Student("Test8", attendanceKey);
+									ofy().save().entities(cron8).now();
 									Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
 									for(Attendance dayTable : attendance){
-										dayTable.assignAbsent(dateCalendar);
-										ofy().save().entities(dayTable).now();
+										Attendance temp = new Attendance(dayTable.getAttendanceKey());
+										HashMap<String, Boolean> tempMap = new HashMap<String, Boolean>(dayTable.getAttendance());
+										temp.assignAbsent(dateCalendar);										
+										temp.setAttendance(tempMap);
+										ofy().save().entities(temp).now();
+										
+//										dayTable.assignAbsent(dateCalendar);
+//										ofy().save().entities(dayTable).now();
 									}
 								}
 								
@@ -164,7 +180,7 @@ public class StopAttendanceServlet extends HttpServlet {
                    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
                    Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        Double distance = R * c;
+        Double distance = new Double(R * c);
          
         return distance;
  

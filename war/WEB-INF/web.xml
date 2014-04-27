@@ -18,25 +18,34 @@
     
 <!-- End Debug Init -->  
     
-<!-- Cron Job -->
+<!-- Cron Jobs -->
     <servlet>
-        <servlet-name>CheckAttendance</servlet-name>
-        <servlet-class>attendance.servlet.CheckAttendanceServlet</servlet-class>
+        <servlet-name>StartAttendance</servlet-name>
+        <servlet-class>attendance.servlet.StartAttendanceServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>CheckAttendance</servlet-name>
-        <url-pattern>/CheckAttendance</url-pattern>
+        <servlet-name>StartAttendance</servlet-name>
+        <url-pattern>/StartAttendance</url-pattern>
     </servlet-mapping>
     
-<security-constraint>
-    <web-resource-collection>
-        <web-resource-name>cron</web-resource-name>
-        <url-pattern>/cron/*</url-pattern>
-    </web-resource-collection>
-    <auth-constraint>
-        <role-name>admin</role-name>
-    </auth-constraint>
-</security-constraint>  
+    <servlet>
+        <servlet-name>StopAttendance</servlet-name>
+        <servlet-class>attendance.servlet.StopAttendanceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StopAttendance</servlet-name>
+        <url-pattern>/StopAttendance</url-pattern>
+    </servlet-mapping>
+    
+<!--<security-constraint>-->
+<!--    <web-resource-collection>-->
+<!--        <web-resource-name>cron</web-resource-name>-->
+<!--        <url-pattern>/cron/*</url-pattern>-->
+<!--    </web-resource-collection>-->
+<!--    <auth-constraint>-->
+<!--        <role-name>admin</role-name>-->
+<!--    </auth-constraint>-->
+<!--</security-constraint>-->  
     
 <!-- End Cron Job -->   
 
@@ -72,15 +81,25 @@
         <url-pattern>/Register</url-pattern>
     </servlet-mapping>
     
-    <!-- Send Email -->
+<!-- Save Classroom -->
     <servlet>
-        <servlet-name>sendEmail</servlet-name>
-        <servlet-class>attendance.servlet.sendEmail</servlet-class>
+        <servlet-name>SaveClassroom</servlet-name>
+        <servlet-class>attendance.servlet.SaveClassroomServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>sendEmail</servlet-name>
-        <url-pattern>/sendEmail</url-pattern>
+        <servlet-name>SaveClassroom</servlet-name>
+        <url-pattern>/SaveClassroom</url-pattern>
     </servlet-mapping>
+    
+<!-- Locate -->
+    <servlet>
+        <servlet-name>Locate</servlet-name>
+        <servlet-class>attendance.servlet.LocateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Locate</servlet-name>
+        <url-pattern>/Locate</url-pattern>
+    </servlet-mapping>    
     
 <!-- End Servlets -->
   
@@ -93,7 +112,6 @@
 		<filter-name>ObjectifyFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
 	
 <!-- End Filter -->  
   

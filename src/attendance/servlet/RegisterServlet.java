@@ -87,28 +87,28 @@ public class RegisterServlet extends HttpServlet {
 				
 				String attendanceKey = new String(req.getParameter("courseDropDown") + Student.normalize(student));
 				
-				String[] parts = attendanceKey.split(": ");
-				attendanceKey = parts[1];
+//				String[] parts = attendanceKey.split(": ");
+//				attendanceKey = parts[1];
 				
 				existingStudent.setAttendanceKey(attendanceKey);
 				ofy().save().entities(existingStudent).now();
 				
 				Attendance newAttendance = new Attendance(attendanceKey);
-//				newAttendance.assignAbsent("2014-04-26");
+				newAttendance.assignAbsent("2014-04-23");
 				ofy().save().entities(newAttendance).now();
 			}
 			else {
 				String attendanceKey = new String(req.getParameter("courseDropDown") + Student.normalize(student));
 				
-				String[] parts = attendanceKey.split(":");
-				attendanceKey = parts[1];
+//				String[] parts = attendanceKey.split(": ");
+//				attendanceKey = parts[1];
 				
 				Student thisStudent = new Student(student, req.getParameter("courseDropDown"));
 //				thisStudent.startAttendance();
 				ofy().save().entities(thisStudent).now();
 				
 				Attendance newAttendance = new Attendance(attendanceKey);
-//				newAttendance.assignAbsent("2014-04-26");
+				newAttendance.assignAbsent("2014-04-26");
 				ofy().save().entities(newAttendance).now();
 			}
 		}				

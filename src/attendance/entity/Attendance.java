@@ -15,6 +15,7 @@ public class Attendance {
 	@Id String attendanceKey;
 	@Persistent(serialized="true")
 	HashMap<String, Boolean> attendance;
+	ArrayList<String> attendanceList;
 	
 	public Attendance(){}
 	
@@ -30,7 +31,15 @@ public class Attendance {
 	public void setAttendanceKey(String key){
 		this.attendanceKey = key;
 	}
-
+	
+	public HashMap<String, Boolean> getAttendance(){
+		return this.attendance;
+	}
+	
+	public void setAttendance(HashMap<String, Boolean> map){
+		this.attendance = map;
+	}
+	
 	// Altering Map Data
 	
 	public void assignPresent(String day) {
