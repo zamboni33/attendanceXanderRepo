@@ -53,6 +53,7 @@ public class RegisterServlet extends HttpServlet {
 		
 		ObjectifyService.register(Professor.class);
 		ObjectifyService.register(Student.class);
+		ObjectifyService.register(Attendance.class);
 		
 		// Update Professor Entity
 		Query<Professor> professors = ofy().load().type(Professor.class)
@@ -93,6 +94,7 @@ public class RegisterServlet extends HttpServlet {
 				ofy().save().entities(existingStudent).now();
 				
 				Attendance newAttendance = new Attendance(attendanceKey);
+//				newAttendance.assignAbsent("2014-04-26");
 				ofy().save().entities(newAttendance).now();
 			}
 			else {
@@ -106,6 +108,7 @@ public class RegisterServlet extends HttpServlet {
 				ofy().save().entities(thisStudent).now();
 				
 				Attendance newAttendance = new Attendance(attendanceKey);
+//				newAttendance.assignAbsent("2014-04-26");
 				ofy().save().entities(newAttendance).now();
 			}
 		}				
